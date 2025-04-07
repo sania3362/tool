@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Online Image Compression Tool - Compress and optimize your images with adjustable quality settings for better performance." />
+  <meta name="keywords" content="image compression, optimize images, image quality, image optimization tool" />
+  <meta name="author" content="Your Name" />
+  <title>Responsive Image Compression Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #333;
+    }
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    header p {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+    .upload-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .file-input-wrapper input[type="file"] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+    }
+    .file-input-btn {
+      background-color: #10b981;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .file-input-btn:hover {
+      background-color: #059669;
+    }
+    .slider-container {
+      margin: 1.5rem 0;
+      text-align: left;
+    }
+    .slider-container label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .slider-container input[type="range"] {
+      width: 100%;
+    }
+    button.compress-btn {
+      background-color: #3b82f6;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button.compress-btn:hover {
+      background-color: #2563eb;
+    }
+    .compressed-img {
+      margin-top: 2rem;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .adsense-box {
+      margin: 2rem 0;
+      width: 100%;
+      max-width: 728px;
+      height: 90px;
+      background: #e5e7eb;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      padding: 1rem;
+      background: #1f2937;
+      color: white;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Image Compression Tool</h1>
+    <p>Compress and optimize your images with adjustable quality</p>
+  </header>
+
+  <main>
+    <div class="adsense-box">
+      <!-- Google AdSense Ad Unit -->
+      <!-- Replace 'ca-pub-XXXXXX' and 'YOUR_AD_UNIT_ID' below with your own -->
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXX" crossorigin="anonymous"></script>
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:728px;height:90px"
+           data-ad-client="ca-pub-XXXXXX"
+           data-ad-slot="YOUR_AD_UNIT_ID"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <div class="upload-box">
+      <div class="file-input-wrapper">
+        <button class="file-input-btn">Choose Image</button>
+        <input type="file" accept="image/*" id="imageInput" />
+      </div>
+      <div class="slider-container">
+        <label for="quality">Compression Quality: <span id="qualityValue">70</span>%</label>
+        <input type="range" id="quality" min="10" max="100" value="70" />
+      </div>
+      <button class="compress-btn" onclick="compressImage()">Compress Image</button>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <img id="outputImage" class="compressed-img" alt="Compressed output" />
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Image Compression Tool. All rights reserved.
+  </footer>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const fileInputBtn = document.querySelector('.file-input-btn');
+    const qualitySlider = document.getElementById('quality');
+    const qualityValue = document.getElementById('qualityValue');
+    const canvas = document.getElementById('canvas');
+    const outputImage = document.getElementById('outputImage');
+
+    qualitySlider.addEventListener('input', () => {
+      qualityValue.textContent = qualitySlider.value;
+    });
+
+    fileInputBtn.addEventListener('click', () => {
+      imageInput.click();
+    });
+
+    function compressImage() {
+      const file = imageInput.files[0];
+      if (!file) {
+        alert('Please upload an image first.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          const quality = qualitySlider.value / 100;
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          outputImage.src = dataUrl;
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
